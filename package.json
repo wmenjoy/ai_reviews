@@ -1,0 +1,139 @@
+{
+  "name": "vscode-notepad-hints",
+  "displayName": "金良提示语",
+  "description": "管理 AI 提示语模板，支持变量填充与上下文引用",
+  "version": "0.1.0",
+  "publisher": "ai-dev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-org/vscode-notepad-hints.git"
+  },
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": ["Other"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      { "command": "prompts.create", "title": "新建提示语", "category": "金良提示语", "icon": "$(new-file)" },
+      { "command": "prompts.edit", "title": "编辑提示语", "category": "金良提示语", "icon": "$(edit)" },
+      { "command": "prompts.use", "title": "使用提示语", "category": "金良提示语", "icon": "$(comment-discussion)" },
+      { "command": "prompts.copy", "title": "复制提示语", "category": "金良提示语", "icon": "$(copy)" },
+      { "command": "prompts.refresh", "title": "刷新视图", "category": "金良提示语", "icon": "$(refresh)" },
+      { "command": "prompts.search", "title": "搜索提示语", "category": "金良提示语", "icon": "$(search)" },
+      { "command": "prompts.toggleScope", "title": "切换工作区优先", "category": "金良提示语" }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "prompts.views",
+          "name": "金良提示语"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "prompts.create",
+          "when": "view == prompts.views",
+          "group": "navigation"
+        },
+        {
+          "command": "prompts.search",
+          "when": "view == prompts.views",
+          "group": "navigation@2"
+        },
+        {
+          "command": "prompts.refresh",
+          "when": "view == prompts.views",
+          "group": "navigation@3"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "prompts.use",
+          "when": "view == prompts.views",
+          "group": "inline"
+        },
+        {
+          "command": "prompts.edit",
+          "when": "view == prompts.views",
+          "group": "inline"
+        },
+        {
+          "command": "prompts.copy",
+          "when": "view == prompts.views",
+          "group": "2_actions"
+        },
+        {
+          "command": "prompts.create",
+          "when": "view == prompts.views",
+          "group": "3_manage"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "prompts.views",
+        "contents": "欢迎使用金良提示语\n[新建你的第一个 Prompt 模板](command:prompts.create)"
+      }
+    ],
+    "configuration": {
+      "title": "金良提示语",
+      "properties": {
+        "prompts.enableInline": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否启用行内补全建议"
+        },
+        "prompts.maxSuggestions": {
+          "type": "number",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 50,
+          "description": "搜索或补全时显示的最大建议数"
+        },
+        "prompts.triggerChars": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [" ", ".", "/", "-", "_"],
+          "description": "触发补全的字符列表"
+        },
+        "prompts.suggestInLanguages": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "仅在特定语言中启用建议 (为空则在所有语言启用)"
+        },
+        "prompts.excludedPaths": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [],
+          "description": "排除的文件路径"
+        },
+        "prompts.workspaceFilePreferred": {
+          "type": "boolean",
+          "default": true,
+          "description": "是否优先使用工作区文件存储提示语"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "test": "npm run compile && node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/vscode": "^1.75.0",
+    "@types/mocha": "^10.0.1",
+    "mocha": "^10.2.0",
+    "glob": "^10.3.10",
+    "@vscode/test-electron": "^2.3.9"
+  }
+}
